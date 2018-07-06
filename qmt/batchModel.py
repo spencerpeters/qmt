@@ -8,7 +8,7 @@ import json
 from six import itervalues
 import qmt
 
-
+# Spencer: no comsol
 class Model:
     def __init__(self, modelPath=None, load=True):
         '''Class for creating, loading, and manipulating a json file that 
@@ -141,7 +141,9 @@ class Model:
         mat_dict = matLib.find(zeroLevelMatName, eunit='eV')
         return mat_dict[zeroLevelProp]
 
-
+    # Spencer: relevant to comsol, so this is what I have to write for FEniCS
+    # What I write should be very analogous, but some of the controls
+    # will be different (as Fenics requires different things than comsol does)
     def genComsolInfo(self, meshExport=None, fileName='comsolModel', exportDir='solutions',
                       repairTolerance=None,physics=['electrostatics'],exportDomains=[],exportScalingVec=[5.,5.,5.]):
         '''
@@ -195,7 +197,7 @@ class Model:
         self.modelDict['comsolInfo']['quantumParams']['eigValSearch'] = eigValSearch           
 
 
-
+    # Spencer: I think this only interfaces with FreeCAD.
     def addPart(self,partName,fcName,directive,domainType,material=None,\
                 z0=None,thickness=None,targetWire=None,shellVerts=None,depoZone=None,etchZone=None,\
                 zMiddle=None,tIn=None,tOut=None,layerNum=None,lithoBase=[],\
@@ -304,7 +306,7 @@ class Model:
         self.modelDict['buildOrder'][len(self.modelDict['buildOrder'])] = partName
         self.modelDict['3DParts'][partName] = partDict
         
-
+    # Spencer: postprocessing -> ignore for now
     def addCrossSection(self, sliceName, axis, distance):
         """
         Add a 2D cross section through the 3D model for postprocessing.
@@ -318,6 +320,8 @@ class Model:
         info = {'sliceName': sliceName, 'crossSection': True, 'axis': axis, 'distance': distance}
         self.modelDict['slices'][sliceName] = {'sliceInfo': info}
 
+    # The info contained in this may be relevant to index the CAD files (e.g., try to do it parametrically
+    # using the model rather than in some ad hoc reverse engineered way)
     def registerCadPart(self, partName,fcName,fileName,reset=False):
         '''Register a 3D CAD part on disk that is associated with the freeCAD 3D part fcName.
         The idea here is that the partName knows what 3D entities were generated from it, what
@@ -327,6 +331,7 @@ class Model:
             self.modelDict['3DParts'][partName]['fileNames']  = {} 
         self.modelDict['3DParts'][partName]['fileNames'][fcName] = fileName
 
+    # I think this is also info for FreeCAD
     def genPart2D(self, partName, geometry, sliceName=None, material=None,
                   objType=None, domainType=None, boundaryConditions=None,
                   descriptors=None, bandOffset=None, surfaceChargeDensity=None,
@@ -386,6 +391,7 @@ class Model:
         sliceParts[partName] = slicePart
         self.modelDict['buildOrder'][len(self.modelDict['buildOrder'])] = partName
 
+    # postproc
     def addThomasFermi2dTask(self, region, grid, slice_name, name=None, write_data=True,
                              plot_data=True, temperature=0.):
         """Add a 2D Thomas-Fermi postprocessing task.
@@ -614,6 +620,7 @@ class Model:
         json.dump(self.modelDict, myFile)
         myFile.close()
 
+    # obvious
     def loadModel(self, updateModel=True):
         '''Load the model from disk.
 
@@ -641,6 +648,7 @@ class Model:
         else:
             self.modelDict = modelDict
 
+    # Execution parameters (some of them for COMSOL)
     def addJob(self, rootPath, jobSequence=None, numNodes=1,numJobsPerNode=1,numCoresPerJob=1,hostFile=None,
                geoGenArgs={}, comsolRunMode='batch',postProcArgs={}):
         '''Add a job to the model.
@@ -692,6 +700,7 @@ class Model:
         self.modelDict['jobSettings']['comsolRunMode'] = comsolRunMode
         self.modelDict['jobSettings']['postProcArgs'] = postProcArgs
 
+    # Could be useful if you have to point to any FEniCS stuff (but I don't think so)
     def setPaths(self, COMSOLExecPath=None, COMSOLCompilePath=None,
                  mpiPath=None, pythonPath=None, jdkPath=None, freeCADPath=None):
         '''Set up paths to execuables.
