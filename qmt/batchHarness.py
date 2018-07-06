@@ -17,7 +17,7 @@ import itertools
 from copy import deepcopy
 import time
 
-
+# Spencer: this is fine
 class Harness:
     def __init__(self, jsonPath, os=None):
         ''' Class to run a batch 3D job on the cluster. 
@@ -155,6 +155,105 @@ class Harness:
 
         myModel.saveModel()
 
+    # def runFenics(self, modelFilePath): 
+    #     import FreeCAD
+    #     import fenics
+
+    #     model = QMT.Model(modelPath=modelFilePath)
+
+    #     FCDocPath = myModel.modelDict['pathSettings']['freeCADPath']
+
+    #     FreeCAD.openDocument(FCDocPath)
+
+    #     part_data = model.modelDict['3DParts']
+
+    #     for part in part_data:
+
+        
+
+
+        # What do I need to do:
+            # First there is some job stuff that maybe can be factored out?
+        
+        # No equivalent to writing, or compiling,  Comsol java driver
+        # don't need MPI launcher hack
+
+        # convert unicode?
+
+        # make output directories (should use python os.path.join)
+        # could just make test dirs for now, hack dude!
+
+        # Comsol is invoked via subprocess. So it needs redirect stdout, stderr flags, but with FEniCS we probably
+        # want the same redirect behavior--don't know quite how to get in Python
+        # Can redirect output resulting from single function call?
+        # No worries for now
+
+        # finally awful doneness checking
+        # So most of the stuff in this file is just logistics
+        # How do the bcs, etc, actually get passed to Comsol?
+        # OH! Via the java model.
+
+        # For FEniCS version of this, should not need the step files.
+        # And do I need a FEniCS model class? Or can I just read the entries of the dict directly?
+
+        # Let's look through what building the comsol file does, in order:
+        # init
+            # flags in modelDict['comsolInfo']['physics'] 
+            # control whether electrostatics, schroedinger, bdg used
+        # write ->
+        # build file header
+            # creates component, 3D geometry, and mesh as empty objects
+            # if necessary, creates other empty things in physics for ES, schroedinger, bdg
+        # add 3D parts
+            # import, mesh, specify materials and physics (must include BCs)
+            # what is build order?
+            # for the BCs, check out
+                # init physics
+                    # sets zero voltage level (model.getSimZero())
+                # for each part: (uses part_data, which is modelDict['3DParts'])
+                # add material
+                    # just adds permittivity
+                # add physics 
+                    # metal, semiconductor, dielectric
+                    # virtual domain?
+                    # for each part
+                    # boundary conditions in part_data['boundaryCondition'
+                    # Lots of complicated other stuff for schroedinger, bdg
+
+
+        # add study
+            # The study is like the things to investigate
+            # Also here all the sweeps are added
+        # add footer
+            # nothing relevant
+
+
+        # The plan:
+        # Let's implement a subset of this functionality
+        # Just the metal, zero voltage, and electrostatics...
+        # hmm, so my thomas-fermi thing was self consistent SP
+        # what does that correspond to here? I'm not sure
+        # But let's JUST do electrostatics :D
+
+        
+
+
+
+
+
+
+
+
+
+        # objList = FreeCAD.ActiveDocument.Objects
+
+        # shapes = []
+
+
+        
+
+        
+
 
 
     def runBatchCOMSOLRun(self, modelFilePath):
@@ -164,7 +263,7 @@ class Harness:
         import qms
         from qms import comsol
         myModel = QMT.Model(modelPath=modelFilePath)
-        myModel.loadModel()
+        myModel.loadModel() # unnecessary
         numNodes = myModel.modelDict['jobSettings']['numNodes']
         numJobsPerNode = myModel.modelDict['jobSettings']['numJobsPerNode']
         numCoresPerJob = myModel.modelDict['jobSettings']['numCoresPerJob']
