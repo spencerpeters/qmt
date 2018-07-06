@@ -47,6 +47,7 @@ class Model:
         modelDict['jobSettings'] = {}  # Information on the job
         modelDict['pathSettings'] = {}  # Information on the paths to executables
         modelDict['postProcess'] = {'sweeps': {}, 'tasks': {}}
+        modelDict['fenicsInfo'] = {}
         return modelDict
 
     def genPhysicsSweep(self, partName, quantity, values, unit="", symbol=None, dense=False):
