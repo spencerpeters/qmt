@@ -129,6 +129,7 @@ class Harness:
         FCDocPath = myModel.modelDict['pathSettings']['freeCADPath']
         FreeCAD.openDocument(FCDocPath)
         # Build the model
+        # Spencer: this appears to do most of the heavy lifting.
         buildModel = modelBuilder(passModel=myModel)
         for i in range(len(myModel.modelDict['buildOrder'])):
             partName = myModel.modelDict['buildOrder'][str(i)]
@@ -142,7 +143,10 @@ class Harness:
         if not os.path.isdir(stlDirPath):
             os.mkdir(stlDirPath)
         buildModel.exportBuiltParts(stepFileDir=dirPath + '/cadParts',stlFileDir=dirPath+'/stlParts')
-        buildModel.saveFreeCADState(dirPath+'/freeCADModel.FCStd')
+        freeCADFilePath3D = dirPath+'/freeCADModel.FCStd'
+        buildModel.saveFreeCADState(freeCADFilePath3D)
+        myModel.modelDict['fenicsInfo']['3DFreeCADFilePath'] = freeCADFilePath3D
+        
         
         # Now that we have rendered the 3D objects, we want to draw any
         # necessary 2D cross sections as 2D cuts:
@@ -163,7 +167,7 @@ class Harness:
 
     #     FCDocPath = myModel.modelDict['pathSettings']['freeCADPath']
 
-    #     FreeCAD.openDocument(FCDocPath)
+    #     FreeCAD.openDocument(FCDocPath)git 
 
     #     part_data = model.modelDict['3DParts']
 

@@ -7,6 +7,7 @@ import os
 import json
 from six import itervalues
 import qmt
+from qmt.materials import Materials
 
 # Spencer: no comsol
 class Model:
@@ -724,3 +725,58 @@ class Model:
         self.modelDict['pathSettings']['pythonPath'] = pythonPath
         self.modelDict['pathSettings']['jdkPath'] = jdkPath
         self.modelDict['pathSettings']['freeCADPath'] = freeCADPath
+
+    # Spencer: add utilities from ModelDictUtilities
+
+    def getNamesToDirichletBCValues(self, model):
+        part_data = self.getPartsData()
+        results = {part: data["boundaryCondition"]["voltage"] for part, data in part_data.items() if data["boundaryCondition"]}
+        for part in results.keys():
+            assert not "flux" in part_data[part]["boundaryCondition"].keys()
+        return results
+    
+    # Placeholder until I know how this really works
+
+    def getNamesToNeumannBCValues(self):
+            part_data = self.getPartsData()
+            results = {part: data["boundaryCondition"]["flux"] for part, data in part_data.items() if data["boundaryCondition"]}
+            for part in results.keys():
+                assert not "voltage" in part_data[part]["boundaryCondition"].keys()
+            return results
+        
+
+    def getFreeCADNameFromModelName(self, modelName):
+        return self.getPartsData()[modelName]['fileNames'].keys()[0]
+
+    def getPartsData(self):
+        return self.modelDict['3DParts']
+
+    def getPartsNames(self):
+        return self.getPartsData().keys()
+
+    def getNamesToMaterialProperties(self):
+        materialsMapping = Materials()
+        result = {}
+        parts_data = self.getPartsData()
+        for name in parts_data.keys():
+            material = parts_data[name]["material"]
+            materialProperties = materialsMapping[material]
+            result[name] = materialProperties
+            
+        return result
+
+    def getEquationToSolve(self):
+        return self.modelDict['fenicsInfo']['equationToSolve']
+
+    def getNamesToRegionIDs(self):
+        names = self.getPartsNames()
+        return {name:i+2 for i, name in enumerate(sorted(names))}
+
+    def getRegionIDsToNames(self):
+        return {id:name for name, id in self.getNamesToRegionIDs().items()}
+
+    def getElementType(self):
+        return self.modelDict['fenicsInfo']['elementType']
+
+    def getElementDegree(self):
+        return self.modelDict['fenicsInfo']['elementDegree']
