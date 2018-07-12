@@ -780,3 +780,6 @@ class Model:
 
     def getElementDegree(self):
         return self.modelDict['fenicsInfo']['elementDegree']
+
+    def getBuildOrder(self):
+        return self.modelDict['buildOrder']
