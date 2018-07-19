@@ -11,8 +11,6 @@ def main():
     addTask.visualize()
     addTask.compute()
     print(addTask.result)
-    print(addTask.compute())
-
 
 class AddTask(Task):
 
@@ -26,7 +24,7 @@ class AddTask(Task):
     def run(self):
         x = delayed(self.leftIncrementTask.run)()
         y = delayed(self.rightIncrementTask.run)()
-        delayedAdd = delayed(sum([x, y, self.number]))
+        delayedAdd = delayed(sum)([x, y, self.number])
         return delayedAdd
 
 
