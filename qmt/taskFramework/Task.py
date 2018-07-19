@@ -1,10 +1,11 @@
 from collections import OrderedDict
 import json
+from RegisterClassConstructorMetaclass import RegisterClassConstructorMetaclass
 
 # todo base import then factories
 
 class Task(object):
-
+    __metaclass__ = RegisterClassConstructorMetaclass
     currentInstanceID = 0
 
     def __init__(self, state=None, dependencies=None, name="Task"):
@@ -25,6 +26,7 @@ class Task(object):
     def toDict(self):
         result = OrderedDict()
         resultData = OrderedDict()
+        resultData['class'] = self.__class__.__name__
         resultData['state'] = self.state
         resultData['dependencies'] = self.dependenciesList()
         result[self.name] = resultData
@@ -39,9 +41,8 @@ class Task(object):
     def dependenciesList(self):
         return [task.toDict() for task in self.dependencies]
 
-
     def run(self):
-        pass
+        raise NotImplementedError("This method is only implemented for subclasses of Task")
 
     def visualize(self):
         return self.run().visualize()
