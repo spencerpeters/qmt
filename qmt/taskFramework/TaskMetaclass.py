@@ -1,5 +1,3 @@
-from Task import Task
-
 class TaskMetaclass(type):
 
     class_registry = {}
