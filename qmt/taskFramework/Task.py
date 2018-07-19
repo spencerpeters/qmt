@@ -22,7 +22,7 @@ class Task(object):
     def toDict(self):
         return {self.name: {'state': self.state, 'dependencies': self.dependenciesDict()}}
 
-    def fromDict(self):
+    # def fromDict(self):
 
 
     def dependenciesDict(self):
