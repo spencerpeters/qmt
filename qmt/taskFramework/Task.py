@@ -1,4 +1,4 @@
-from dask import delayed
+from collections import OrderedDict
 
 
 # todo base import then factories
@@ -20,12 +20,20 @@ class Task(object):
         self.result = None
 
     def toDict(self):
-        return {self.name: {'state': self.state, 'dependencies': {}}}
+        result = OrderedDict()
+        resultData = OrderedDict()
+        resultData['state'] = self.state
+        resultData['dependencies'] = self.dependenciesDict()
+        result[self.name] = resultData
+        return result
 
     # def fromDict(self):
 
     def dependenciesDict(self):
-        return {task.name: task.toDict() for task in self.dependencies}
+        result = OrderedDict()
+        for task in self.dependencies:
+            result[task.name] = task.toDict()
+        return result
 
     def run(self):
         pass
