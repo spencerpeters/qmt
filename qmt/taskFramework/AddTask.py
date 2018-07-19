@@ -6,7 +6,7 @@ from Task import Task
 def main():
     leftIncrementTask = IncrementTask(0)
     rightIncrementTask = IncrementTask(1)
-    addTask = AddTask()
+    addTask = AddTask(leftIncrementTask, rightIncrementTask, 10)
     addTask.visualize()
     print(addTask.compute())
 
