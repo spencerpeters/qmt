@@ -8,7 +8,6 @@ from TaskMetaclass import TaskMetaclass
 class Task(object):
     __metaclass__ = TaskMetaclass
     current_instance_id = 0
-    class_registry = {}
 
     def __init__(self, state=None, dependencies=None, name="Task"):
         self.name = name + "#" + str(Task.current_instance_id)
@@ -38,7 +37,7 @@ class Task(object):
     def from_dict(dict_representation):
         taskName, data = dict_representation.items()[0]
         className = data['class']
-        target_class = Task.class_registry[className]
+        target_class = TaskMetaclass.class_registry[className]
         state = data['state']
         dependencies = [Task.from_dict(dependency) for dependency in data['dependencies']]
         return target_class.from_serialized_form(taskName, state, dependencies)
@@ -63,7 +62,3 @@ class Task(object):
     def compute(self):
         if self.result is None:
             self.result = self.run().compute()
-
-    @staticmethod
-    def register_class(classToRegister):
-        Task.class_registry[classToRegister.__name__] = classToRegister
