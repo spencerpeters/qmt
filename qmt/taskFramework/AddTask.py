@@ -12,6 +12,7 @@ def main():
     addTask.compute()
     print(addTask.result)
 
+
 class AddTask(Task):
 
     def __init__(self, leftIncrementTask, rightIncrementTask, number, name="AddTask"):

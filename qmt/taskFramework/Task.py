@@ -22,6 +22,9 @@ class Task(object):
     def toDict(self):
         return {self.name: {'state': self.state, 'dependencies': self.dependenciesDict()}}
 
+    def fromDict(self):
+
+
     def dependenciesDict(self):
         return {task.name: task.toDict() for task in self.dependencies}
 
