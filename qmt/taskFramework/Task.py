@@ -9,6 +9,7 @@ class Task(object):
 
     def __init__(self, state=None, dependencies=None, name="Task"):
         self.name = name + "#" + str(Task.currentInstanceID)
+        print("id incremented")
         Task.currentInstanceID += 1
 
         self.state = state
