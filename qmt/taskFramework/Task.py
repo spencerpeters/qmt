@@ -1,5 +1,6 @@
 from dask import delayed
 
+
 # todo base import then factories
 
 class Task(object):
@@ -18,12 +19,10 @@ class Task(object):
 
         self.result = None
 
-
     def toDict(self):
-        return {self.name: {'state': self.state, 'dependencies': self.dependenciesDict()}}
+        return {self.name: {'state': self.state, 'dependencies': {}}}
 
     # def fromDict(self):
-
 
     def dependenciesDict(self):
         return {task.name: task.toDict() for task in self.dependencies}
@@ -37,5 +36,3 @@ class Task(object):
     def compute(self):
         if self.result is None:
             self.result = self.run().compute()
-
-
