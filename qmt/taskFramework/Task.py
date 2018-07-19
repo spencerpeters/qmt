@@ -16,6 +16,8 @@ class Task(object):
         if dependencies is None:
             self.dependencies = []
 
+        self.result = None
+
 
     def toDict(self):
         return {self.name: {'state': self.state, 'dependencies': self.dependenciesDict()}}
@@ -30,6 +32,6 @@ class Task(object):
         return self.run().visualize()
 
     def compute(self):
-        return self.run().compute()
+        self.result = self.run().compute()
 
 
