@@ -5,8 +5,11 @@ from collections import OrderedDict
 
 class Task(object):
 
+    currentInstanceID = 0
+
     def __init__(self, state=None, dependencies=None, name="Task"):
-        self.name = name
+        self.name = name + "#" + str(Task.currentInstanceID)
+        Task.currentInstanceID += 1
 
         self.state = state
         self.dependencies = dependencies
