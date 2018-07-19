@@ -10,8 +10,10 @@ class Task(object):
     current_instance_id = 0
 
     def __init__(self, state=None, dependencies=None, name="Task"):
-        self.name = name + "#" + str(Task.current_instance_id)
-        Task.current_instance_id += 1
+
+        if "#" not in name:
+            self.name = name + "#" + str(Task.current_instance_id)
+            Task.current_instance_id += 1
 
         self.state = state
         self.dependencies = dependencies
