@@ -32,6 +32,7 @@ class Task(object):
         return self.run().visualize()
 
     def compute(self):
-        self.result = self.run().compute()
+        if self.result is None:
+            self.result = self.run().compute()
 
 
