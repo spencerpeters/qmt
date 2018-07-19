@@ -6,17 +6,17 @@ class IncrementTask(Task):
     def __init__(self, number, name="IncrementTask"):
         state = {'number': number}
         super(IncrementTask, self).__init__(state=state, name=name)
-        self.number = number
+        self._number = number
 
     @property
     def number(self):
-        return self.number
+        return self._number
 
     @number.setter
     def number(self, number):
         if number < 0:
             raise ValueError("number must be >= 0")
-        self.number = number
+        self._number = number
 
     @staticmethod
     def from_serialized_form(name, state, dependencies):
