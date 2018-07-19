@@ -15,19 +15,26 @@ def main():
 
 class AddTask(Task):
 
-    def __init__(self, leftIncrementTask, rightIncrementTask, number, name="AddTask"):
+    def __init__(self, left_increment_task, right_increment_task, number, name="AddTask"):
         state = {'number': number}
-        super(AddTask, self).__init__(state=state, dependencies=[leftIncrementTask, rightIncrementTask], name=name)
-        self.leftIncrementTask = leftIncrementTask
-        self.rightIncrementTask = rightIncrementTask
+        super(AddTask, self).__init__(state=state, dependencies=[left_increment_task, right_increment_task], name=name)
+        self.left_increment_task = left_increment_task
+        self.right_increment_task = right_increment_task
         self.number = number
 
+    @staticmethod
+    def from_serialized_form(name, state, dependencies):
+        return AddTask(dependencies[0], dependencies[1], state['number'], name)
+
     def run(self):
-        x = delayed(self.leftIncrementTask.run)()
-        y = delayed(self.rightIncrementTask.run)()
-        delayedAdd = delayed(sum)([x, y, self.number])
-        return delayedAdd
+        x = delayed(self.left_increment_task.run)()
+        y = delayed(self.right_increment_task.run)()
+        delayed_add = delayed(sum)([x, y, self.number])
+        return delayed_add
 
 
 if __name__ == "main":
     main()
+
+
+# versions:
