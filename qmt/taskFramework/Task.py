@@ -23,11 +23,10 @@ class Task(object):
         self.result = None
 
     def toDict(self):
-        result = OrderedDict()
         resultData = OrderedDict()
         resultData['state'] = self.state
         resultData['dependencies'] = self.dependenciesList()
-        result[self.name] = resultData
+        result = (self.name, resultData)
         return result
 
     # def fromDict(self):
