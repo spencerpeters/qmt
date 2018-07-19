@@ -26,7 +26,7 @@ class Task(object):
         result = OrderedDict()
         resultData = OrderedDict()
         resultData['state'] = self.state
-        resultData['dependencies'] = self.dependenciesDict()
+        resultData['dependencies'] = self.dependenciesList()
         result[self.name] = resultData
         return result
 
