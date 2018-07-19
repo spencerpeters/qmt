@@ -11,8 +11,9 @@ class Task(object):
 
     def __init__(self, state=None, dependencies=None, name="Task"):
 
+        self.name = name
         if "#" not in name:
-            self.name = name + "#" + str(Task.current_instance_id)
+            self.name += "#" + str(Task.current_instance_id)
             Task.current_instance_id += 1
 
         self.state = state
