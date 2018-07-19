@@ -8,6 +8,7 @@ class IncrementTask(Task):
         super(IncrementTask, self).__init__(state=state, name=name)
         self.number = number
 
+    @staticmethod
     def from_serialized_form(name, state, dependencies):
         return IncrementTask(state['number'], name)
 
