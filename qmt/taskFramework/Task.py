@@ -9,7 +9,6 @@ class Task(object):
 
     def __init__(self, state=None, dependencies=None, name="Task"):
         self.name = name + "#" + str(Task.currentInstanceID)
-        print("id incremented")
         Task.currentInstanceID += 1
 
         self.state = state
@@ -33,11 +32,9 @@ class Task(object):
 
     # def fromDict(self):
 
-    def dependenciesDict(self):
-        result = OrderedDict()
-        for task in self.dependencies:
-            result[task.name] = task.toDict()
-        return result
+    def dependenciesList(self):
+        return [task.toDict() for task in self.dependencies]
+
 
     def run(self):
         pass
