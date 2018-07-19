@@ -1,4 +1,5 @@
 from collections import OrderedDict
+import json
 
 
 # todo base import then factories
@@ -31,6 +32,9 @@ class Task(object):
         return result
 
     # def fromDict(self):
+
+    def save(self, fileName):
+        json.dump(self.toDict(), fileName)
 
     def dependenciesList(self):
         return [task.toDict() for task in self.dependencies]
