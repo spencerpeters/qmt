@@ -29,4 +29,7 @@ class Task(object):
     def visualize(self):
         return self.run().visualize()
 
+    def compute(self):
+        return self.run().compute()
+
 

@@ -7,6 +7,8 @@ def main():
     leftIncrementTask = IncrementTask(0)
     rightIncrementTask = IncrementTask(1)
     addTask = AddTask()
+    addTask.visualize()
+    print(addTask.compute())
 
 class AddTask(Task):
 
@@ -22,9 +24,6 @@ class AddTask(Task):
         y = delayed(self.rightIncrementTask.run)()
         result = delayed(sum([x, y, self.number]))
         return result
-
-    def compute(self):
-        return self.run().compute()
 
 
 
