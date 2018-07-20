@@ -5,8 +5,7 @@ from Task import Task
 class IncrementTask(Task):
 
     def __init__(self, number, name="IncrementTask"):
-        state, dependencies, arguments = Task.parseArgumentsToStateAndDependencies(locals())
-        super(IncrementTask, self).__init__(state=state, dependencies=dependencies, name=name)
+        super(IncrementTask, self).__init__(locals())
         self.number = number  #optional
 
     # @property
