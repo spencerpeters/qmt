@@ -29,7 +29,7 @@ class Task(object):
         result = OrderedDict()
         result_data = OrderedDict()
         result_data['class'] = self.__class__.__name__
-        result_data['dependencies'] = self.dependencies_dict()
+        result_data['argumentDictionary'] = self.dependencies_dict()
         result[self.name] = result_data
         return result
 
@@ -39,12 +39,12 @@ class Task(object):
         className = data['class']
         target_class = TaskMetaclass.class_registry[className]
         kwargs = {}
-        for argName, argValue in data['dependencies'].items():
+        for argName, argValue in data['argumentDictionary'].items():
             if Task.isTaskRepresentation(argValue):
                 kwargs[argName] = Task.from_dict(argValue)
             else:
                 kwargs[argName] = argValue
-
+        print(target_class)
         return target_class(name=taskName, **kwargs)
 
     def save(self, file_name):
