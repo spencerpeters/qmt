@@ -12,8 +12,6 @@ class Task(object):
 
     def __init__(self, **kwargs):
 
-        print("kwargs " + str(kwargs))
-
         if "name" not in kwargs:
             raise AttributeError("All subclasses of Task must have a 'name' keyword argument")
 
