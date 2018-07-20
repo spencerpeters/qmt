@@ -54,7 +54,7 @@ class Task(object):
     def dependencies_dict(self):
         result = {}
         for argName, argValue in self.argumentDictionary.items():
-            if issubclass(argValue, Task):
+            if isinstance(argValue, Task):
                 result[argName] = argValue.to_dict()
             else:
                 result[argName] = argValue
@@ -78,4 +78,4 @@ class Task(object):
 
     @staticmethod
     def isTaskRepresentation(argValue):
-        return issubclass(argValue, dict) and "class" in argValue
+        return isinstance(argValue, dict) and "class" in argValue
