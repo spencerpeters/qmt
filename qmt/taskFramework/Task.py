@@ -78,5 +78,6 @@ class Task(object):
         init_arguments.pop('self', None)
         return init_arguments
 
+    @staticmethod
     def isTaskRepresentation(argValue):
         return type(argValue) is dict and "class" in argValue
