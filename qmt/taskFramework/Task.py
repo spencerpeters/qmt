@@ -78,4 +78,7 @@ class Task(object):
 
     @staticmethod
     def isTaskRepresentation(argValue):
-        return isinstance(argValue, dict) and "class" in argValue
+        # check if it has form {name:otherDict}
+        hasSingleItem = isinstance(argValue, dict) and len(argValue.items()) == 1
+        # check if it has the class to reconstitute the task from
+        return hasSingleItem and "class" in argValue.values()[0]
