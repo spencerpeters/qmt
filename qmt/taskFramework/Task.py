@@ -64,13 +64,7 @@ class Task(object):
         return result
 
     def run(self):
-        for argument in self.argumentDictionary.values():
-            if type(argument) is Task:
-                argument.run()
-        self.run_self()
-
-    def run_self(self):
-        raise NotImplementedError("Task is abstract. This method is defined only for subclasses of Task.")
+        raise NotImplementedError("Task is abstract. Method 'run' is defined only for subclasses of Task.")
 
     def visualize(self):
         return self.run().visualize()

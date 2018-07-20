@@ -20,7 +20,7 @@ class AddTask(Task):
         self.right_increment_task = right_increment_task
         self.number = number
 
-    def run_self(self):
+    def run(self):
         x = delayed(self.left_increment_task.run)()
         y = delayed(self.right_increment_task.run)()
         delayed_add = delayed(sum)([x, y, self.number])
@@ -29,6 +29,5 @@ class AddTask(Task):
 
 if __name__ == "main":
     main()
-
 
 # versions:
