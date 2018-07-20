@@ -16,7 +16,7 @@ def main():
 class AddTask(Task):
 
     def __init__(self, left_increment_task, right_increment_task, number, name="AddTask"):
-        super(AddTask, self).__init__(locals())
+        super(AddTask, self).__init__(**Task.remove_self_argument(locals()))
         self.left_increment_task = left_increment_task
         self.right_increment_task = right_increment_task
         self.number = number
