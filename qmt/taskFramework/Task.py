@@ -69,3 +69,8 @@ class Task(object):
     def compute(self):
         if self.result is None:
             self.result = self.run().compute()
+
+    @staticmethod
+    def remove_self_argument(init_arguments):
+        init_arguments.pop('self', None)
+        return init_arguments
