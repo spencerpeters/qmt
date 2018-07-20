@@ -9,9 +9,6 @@ class Task(object):
     __metaclass__ = TaskMetaclass
     current_instance_id = 0
 
-
-    # TODO put *args here, that way the subclass can dump them here.
-    #
     def __init__(self, **kwargs):
 
         print("kwargs " + str(kwargs))
@@ -20,15 +17,12 @@ class Task(object):
             raise AttributeError("All subclasses of Task must have a 'name' keyword argument")
 
         self.name = kwargs["name"]
+        if "#" not in self.name:
+            self.name += "#" + str(Task.current_instance_id)
+            Task.current_instance_id += 1
 
         self.dependencies = kwargs
         self.dependencies.pop("name", None)
-
-        # self.hasBeenWritten = False
-
-        if "#" not in name:
-            self.name += "#" + str(Task.current_instance_id)
-            Task.current_instance_id += 1
 
         self.result = None
 
