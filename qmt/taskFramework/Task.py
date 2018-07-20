@@ -5,6 +5,7 @@ from TaskMetaclass import TaskMetaclass
 
 # todo base import then factories
 
+
 class Task(object):
     __metaclass__ = TaskMetaclass
     current_instance_id = 0
@@ -21,8 +22,8 @@ class Task(object):
             self.name += "#" + str(Task.current_instance_id)
             Task.current_instance_id += 1
 
-        self.dependencies = kwargs
-        self.dependencies.pop("name", None)
+        self.argumentDictionary = kwargs
+        self.argumentDictionary.pop("name", None)
 
         self.result = None
 
@@ -39,7 +40,13 @@ class Task(object):
         taskName, data = dict_representation.items()[0]
         className = data['class']
         target_class = TaskMetaclass.class_registry[className]
-        kwargs = {name: Task.from_dict(value) for name, value in data['dependencies'].items()}
+        kwargs = {}
+        for argName, argValue in data['dependencies'].items():
+            if Task.isTaskRepresentation(argValue):
+                kwargs[argName] = Task.from_dict(argValue)
+            else:
+                kwargs[argName] = argValue
+
         return target_class(name=taskName, **kwargs)
 
     def save(self, file_name):
@@ -47,14 +54,22 @@ class Task(object):
             json.dump(self.to_dict(), jsonFile)
 
     def dependencies_dict(self):
-        return {name: task.to_dict() for name, task in self.dependencies.items()}
+        result = {}
+        for argName, argValue in self.argumentDictionary.items():
+            if type(argValue) is Task:
+                result[argName] = argValue.to_dict()
+            else:
+                result[argName] = argValue
+
+        return result
 
     def run(self):
-        for task in self.dependencies.keys():
-            task.run()
-        self.runSelf()
+        for argument in self.argumentDictionary.values():
+            if type(argument) is Task:
+                argument.run()
+        self.run_self()
 
-    def runSelf(self):
+    def run_self(self):
         raise NotImplementedError("Task is abstract. This method is defined only for subclasses of Task.")
 
     def visualize(self):
@@ -68,3 +83,6 @@ class Task(object):
     def remove_self_argument(init_arguments):
         init_arguments.pop('self', None)
         return init_arguments
+
+    def isTaskRepresentation(argValue):
+        return type(argValue) is dict and "class" in argValue

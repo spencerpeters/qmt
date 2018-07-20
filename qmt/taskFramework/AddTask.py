@@ -1,5 +1,4 @@
 from dask import delayed
-import json
 from IncrementTask import IncrementTask
 from Task import Task
 
@@ -21,7 +20,7 @@ class AddTask(Task):
         self.right_increment_task = right_increment_task
         self.number = number
 
-    def run(self):
+    def run_self(self):
         x = delayed(self.left_increment_task.run)()
         y = delayed(self.right_increment_task.run)()
         delayed_add = delayed(sum)([x, y, self.number])
