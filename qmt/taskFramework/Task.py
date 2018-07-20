@@ -12,21 +12,21 @@ class Task(object):
 
     # TODO put *args here, that way the subclass can dump them here.
     #
-    def __init__(self, state=None, dependencies=None, name="Task"):
+    def __init__(self, name="Task", **kwargs):
 
-        self.name = name
+        if "name" not in kwargs:
+            raise AttributeError("All subclasses of Task must have a 'name' keyword argument")
+
+        self.name = kwargs["name"]
+
+        self.dependencies = kwargs
+        self.dependencies.pop("name", None)
+
+        # self.hasBeenWritten = False
+
         if "#" not in name:
             self.name += "#" + str(Task.current_instance_id)
             Task.current_instance_id += 1
-
-        self.state = state
-        self.dependencies = dependencies
-
-        if state is None:
-            self.state = {}
-
-        if dependencies is None:
-            self.dependencies = []
 
         self.result = None
 
@@ -34,8 +34,7 @@ class Task(object):
         result = OrderedDict()
         result_data = OrderedDict()
         result_data['class'] = self.__class__.__name__
-        result_data['state'] = self.state
-        result_data['dependencies'] = self.dependencies_list()
+        result_data['dependencies'] = self.dependencies_dict()
         result[self.name] = result_data
         return result
 
@@ -44,20 +43,23 @@ class Task(object):
         taskName, data = dict_representation.items()[0]
         className = data['class']
         target_class = TaskMetaclass.class_registry[className]
-        state = data['state']
-        dependencies = [Task.from_dict(dependency) for dependency in data['dependencies']]
-        return target_class.from_serialized_form(taskName, state, dependencies)
+        kwargs = {name: Task.from_dict(value) for name, value in data['dependencies'].items()}
+        return target_class(name=taskName, **kwargs)
 
     def save(self, file_name):
         with open(file_name, 'w') as jsonFile:
             json.dump(self.to_dict(), jsonFile)
 
-    def dependencies_list(self):
-        return [task.to_dict() for task in self.dependencies]
+    def dependencies_dict(self):
+        return {name: task.to_dict() for name, task in self.dependencies.items()}
 
     def run(self):
-        # TODO should run all the dependencies
-        raise NotImplementedError("This method is only implemented for subclasses of Task")
+        for task in self.dependencies.keys():
+            task.run()
+        self.runSelf()
+
+    def runSelf(self):
+        raise NotImplementedError("Task is abstract. This method is defined only for subclasses of Task.")
 
     def visualize(self):
         return self.run().visualize()
@@ -65,13 +67,3 @@ class Task(object):
     def compute(self):
         if self.result is None:
             self.result = self.run().compute()
-
-    @staticmethod
-    def parseArgumentsToDict(arguments):
-        state = {}
-        dependencies = []
-        arguments.pop('name', None)
-        for argName, argValue in arguments.items():
-
-
-        return state, dependencies
