@@ -12,7 +12,7 @@ class Task(object):
 
     # TODO put *args here, that way the subclass can dump them here.
     #
-    def __init__(self, name="Task", **kwargs):
+    def __init__(self, **kwargs):
 
         print("kwargs " + str(kwargs))
 

@@ -5,7 +5,7 @@ from Task import Task
 class IncrementTask(Task):
 
     def __init__(self, number, name="IncrementTask"):
-        super(IncrementTask, self).__init__(Task.remove_self_argument(locals()))
+        super(IncrementTask, self).__init__(**Task.remove_self_argument(locals()))
         self.number = number  #optional
 
     # @property
