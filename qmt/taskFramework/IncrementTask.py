@@ -6,7 +6,7 @@ class IncrementTask(Task):
 
     def __init__(self, number, name="IncrementTask"):
         print(locals())
-        super(IncrementTask, self).__init__(locals())
+        super(IncrementTask, self).__init__(**locals())
         self.number = number  #optional
 
     # @property
