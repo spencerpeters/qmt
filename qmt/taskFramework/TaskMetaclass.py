@@ -7,9 +7,6 @@ class TaskMetaclass(type):
 
         TaskMetaclass.register_class(cls)
 
-        if not 'from_serialized_form' in class_dict:
-            raise ValueError("Subclasses of Task must provide a from_serializable_form method")
-
         return cls
 
     @staticmethod

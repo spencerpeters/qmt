@@ -1,12 +1,13 @@
 import json
 from Task import Task
+from Task import Task
 
 class IncrementTask(Task):
 
     def __init__(self, number, name="IncrementTask"):
-        state = {'number': number}
-        super(IncrementTask, self).__init__(state=state, name=name)
-        self.number = number
+        state, dependencies, arguments = Task.parseArgumentsToStateAndDependencies(locals())
+        super(IncrementTask, self).__init__(state=state, dependencies=dependencies, name=name)
+        self.number = number  #optional
 
     # @property
     # def number(self):

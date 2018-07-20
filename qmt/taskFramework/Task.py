@@ -9,6 +9,9 @@ class Task(object):
     __metaclass__ = TaskMetaclass
     current_instance_id = 0
 
+
+    # TODO put *args here, that way the subclass can dump them here.
+    #
     def __init__(self, state=None, dependencies=None, name="Task"):
 
         self.name = name
@@ -53,10 +56,7 @@ class Task(object):
         return [task.to_dict() for task in self.dependencies]
 
     def run(self):
-        raise NotImplementedError("This method is only implemented for subclasses of Task")
-
-    @staticmethod
-    def from_serialized_form(name, state, dependencies):
+        # TODO should run all the dependencies
         raise NotImplementedError("This method is only implemented for subclasses of Task")
 
     def visualize(self):
@@ -65,3 +65,13 @@ class Task(object):
     def compute(self):
         if self.result is None:
             self.result = self.run().compute()
+
+    @staticmethod
+    def parseArgumentsToDict(arguments):
+        state = {}
+        dependencies = []
+        arguments.pop('name', None)
+        for argName, argValue in arguments.items():
+
+
+        return state, dependencies
